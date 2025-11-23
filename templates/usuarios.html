@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/usuarios.css">
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-4">
+
+    <h2 class="text-info mb-4">Gerenciar Usuários</h2>
+
+    {% if request.args.get('erro') == 'senhas_diferentes' %}
+    <div class="alert alert-danger">As senhas não coincidem!</div>
+    {% endif %}
+
+    {% if request.args.get('sucesso') == 'senha_alterada' %}
+    <div class="alert alert-success">Senha alterada com sucesso!</div>
+    {% endif %}
+
+    <!-- FORMULÁRIO DE ADICIONAR -->
+    <div class="card p-3 mb-4 shadow" style="background:#1e293b;">
+        <h5 class="text-light">Adicionar novo usuário:</h5>
+        <form method="POST" action="/usuarios/add" class="row g-3">
+            <div class="col-md-3">
+                <input class="form-control" type="text" name="usuario" placeholder="Usuário" required>
+            </div>
+            <div class="col-md-3">
+                <input class="form-control" type="password" name="senha" placeholder="Senha" required>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-info w-100">Adicionar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- TABELA -->
+    <div class="card p-3 shadow" style="background:#1e293b;">
+        <table class="table table-dark table-hover text-center align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Usuário</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for u in usuarios %}
+                <tr>
+                    <td>{{ u.usuarioID }}</td>
+                    <td>{{ u.usuario }}</td>
+                    <td>
+                        <a href="#" class="text-info" onclick="mostrarSenha({{ u.usuarioID }})">Alterar senha</a> |
+                        <a class="text-danger" href="/usuarios/delete/{{ u.usuarioID }}">Excluir</a>
+                    </td>
+                </tr>
+
+                <!-- Form alterar senha -->
+                <tr id="form{{ u.usuarioID }}" class="senha-row" style="display:none;">
+                    <td colspan="3">
+                        <form method="POST" action="/usuarios/senha/{{ u.usuarioID }}" class="row g-2 justify-content-center">
+                            <div class="col-md-3">
+                                <input class="form-control" type="password" name="senha" placeholder="Nova senha" required>
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control" type="password" name="confirmar" placeholder="Confirmar senha" required>
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success w-100">Salvar</button>
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button" onclick="fecharSenha({{ u.usuarioID }})" class="btn btn-danger w-100">Cancelar</button>
+                            </div>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script>
+function mostrarSenha(id) {
+    document.getElementById("form" + id).style.display = "table-row";
+}
+function fecharSenha(id) {
+    document.getElementById("form" + id).style.display = "none";
+}
+</script>
+
+{% endblock %}

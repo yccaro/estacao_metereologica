@@ -1,0 +1,29 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual environment
+venv/
+.env/
+
+# Flask instance folder
+instance/
+
+# Logs
+*.log
+
+# Database temp files
+*.sql
+*.db
+
+# IDE files
+.vscode/
+.idea/
+
+# System junk
+Thumbs.db
+.DS_Store
+
+# OneDrive sync metadata
+*.lnk

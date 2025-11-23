@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block css %}
+<link rel="stylesheet" href="/static/css/painel.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<h1 class="text-center text-info">Painel de monitoramento</h1>
+<p class="text-center text-light">Últimos 40 registros</p>
+
+<div class="card bg-secondary p-4 mb-4">
+    <canvas id="grafTemp"></canvas>
+</div>
+
+<div class="card bg-secondary p-4 mb-4">
+    <canvas id="grafUmi"></canvas>
+</div>
+
+<div class="card bg-secondary p-4 mb-4">
+    <canvas id="grafPres"></canvas>
+</div>
+
+<script src="/static/js/charts.js"></script>
+{% endblock %}
