@@ -1,27 +1,42 @@
-from flask import render_template, jsonify, session, redirect
-from config import app, SessionLocal
+from flask import Blueprint,  render_template, jsonify, session, redirect
 from models import Leitura
+from sqlalchemy import text
 
-@app.route('/painel')
+leitura_bp = Blueprint("leituras", __name__)
+
+
+def login_required(func):
+    def wrapper(*args, **kwargs):
+        if "usuario" not in session:
+            return redirect("/login")
+        return func(*args, **kwargs)
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
+@leitura_bp.route("/painel")
+@login_required
 def painel():
-    if 'usuario' not in session:
-        return redirect('/')
     return render_template("painel.html")
 
 
-@app.route('/api/leituras')
+@leitura_bp.route("/api/leituras")
+@login_required
 def api_leituras():
-    db = SessionLocal()
-    dados = db.query(Leitura).order_by(Leitura.dataTime.desc()).limit(40).all()
+    from app import app
+    db = app.db()
 
-    dados_formatados = [
-        {
-            "dataTime": l.dataTime.strftime("%Y-%m-%d %H:%M:%S"),
-            "temperatura": float(l.temperatura),
-            "umidade": float(l.umidade),
-            "pressao": float(l.pressao)
-        }
-        for l in reversed(dados)
-    ]
+    dados = db.execute(text(
+        "SELECT * FROM leitura ORDER BY leituraID DESC LIMIT 40"
+    )).fetchall()
 
-    return jsonify(dados_formatados)
+    resp = []
+    for d in dados:
+        resp.append({
+            "temperatura": d.temperatura,
+            "umidade": d.umidade,
+            "pressao": d.pressao,
+            "dataTime": str(d.dataTime)
+        })
+
+    return jsonify(resp)

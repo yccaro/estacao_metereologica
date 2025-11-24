@@ -1,27 +1,34 @@
-from flask import render_template, request, redirect, session
-from config import app, bcrypt, SessionLocal
+from flask import Blueprint, render_template, request, redirect, url_for, session
+from models import Usuario
 from sqlalchemy import text
 
-@app.route('/', methods=['GET', 'POST'])
+auth_bp = Blueprint("auth", __name__)
+
+
+@auth_bp.route("/login", methods=["GET", "POST"])
+@auth_bp.route("/", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        usuario = request.form['usuario']
-        senha = request.form['senha']
+    from app import app  # evita import circular
 
-        db = SessionLocal()
-        query = text("SELECT usuarioID, usuario, senha FROM usuario WHERE usuario = :u")
-        user = db.execute(query, {'u': usuario}).fetchone()
+    if request.method == "POST":
+        usuario = request.form["usuario"]
+        senha = request.form["senha"]
 
-        if user and bcrypt.check_password_hash(user.senha, senha):
-            session['usuario'] = user.usuario
-            return redirect('/painel')
+        db = app.db()
 
-        return render_template('login.html', erro="Usuário ou senha incorretos.")
+        result = db.execute(text("SELECT * FROM usuario WHERE usuario = :u"),
+                            {"u": usuario}).fetchone()
 
-    return render_template('login.html')
+        if result and app.bcrypt.check_password_hash(result.senha, senha):
+            session["usuario"] = usuario
+            return redirect("/painel")
+        else:
+            return render_template("login.html", erro="Usuário ou senha incorretos!")
+
+    return render_template("login.html")
 
 
-@app.route('/logout')
+@auth_bp.route("/logout")
 def logout():
-    session.pop('usuario', None)
-    return redirect('/')
+    session.clear()
+    return redirect("/login")

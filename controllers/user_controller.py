@@ -1,84 +1,75 @@
-from flask import render_template, request, redirect, session
-from config import app, bcrypt, SessionLocal
+from flask import Blueprint, render_template, request, redirect, session, url_for
 from models import Usuario
+from sqlalchemy import text
 
-# ------------------------------
-# LISTAR USUÁRIOS
-# ------------------------------
-@app.route('/usuarios')
-def usuarios():
-    if 'usuario' not in session:
-        return redirect('/')
+user_bp = Blueprint("usuarios", __name__)
 
-    db = SessionLocal()
-    lista = db.query(Usuario).all()
 
+def login_required(func):
+    def wrapper(*args, **kwargs):
+        if "usuario" not in session:
+            return redirect("/login")
+        return func(*args, **kwargs)
+    wrapper.__name__ = func.__name__
+    return wrapper
+
+
+@user_bp.route("/usuarios")
+@login_required
+def lista_usuarios():
+    from app import app
+    db = app.db()
+
+    lista = db.execute(text("SELECT * FROM usuario")).fetchall()
     return render_template("usuarios.html", usuarios=lista)
 
 
-# ------------------------------
-# ADICIONAR USUÁRIO
-# ------------------------------
-@app.route('/usuarios/add', methods=['POST'])
+@user_bp.route("/usuarios/add", methods=["POST"])
+@login_required
 def add_usuario():
-    if 'usuario' not in session:
-        return redirect('/')
+    from app import app
+    db = app.db()
 
-    db = SessionLocal()
+    usuario = request.form["usuario"]
+    senha = request.form["senha"]
 
-    nome = request.form['usuario']
-    senha = request.form['senha']
+    senha_hash = app.bcrypt.generate_password_hash(senha).decode('utf-8')
 
-    hash_senha = bcrypt.generate_password_hash(senha).decode('utf-8')
+    db.execute(text("INSERT INTO usuario (usuario, senha) VALUES (:u, :s)"),
+               {"u": usuario, "s": senha_hash})
 
-    novo = Usuario(usuario=nome, senha=hash_senha)
-
-    db.add(novo)
     db.commit()
+    return redirect("/usuarios")
 
-    return redirect('/usuarios')
 
-
-# ------------------------------
-# EXCLUIR USUÁRIO
-# ------------------------------
-@app.route('/usuarios/delete/<int:id>')
+@user_bp.route("/usuarios/delete/<int:id>")
+@login_required
 def delete_usuario(id):
-    if 'usuario' not in session:
-        return redirect('/')
+    from app import app
+    db = app.db()
 
-    db = SessionLocal()
-    user = db.query(Usuario).filter(Usuario.usuarioID == id).first()
-
-    if user:
-        db.delete(user)
-        db.commit()
-
-    return redirect('/usuarios')
-
-
-# ------------------------------
-# ALTERAR SENHA DO USUÁRIO
-# ------------------------------
-@app.route('/usuarios/senha/<int:id>', methods=['POST'])
-def alterar_senha(id):
-    if 'usuario' not in session:
-        return redirect('/')
-
-    senha1 = request.form['senha']
-    senha2 = request.form['confirmar']
-
-    if senha1 != senha2:
-        return redirect('/usuarios?erro=senhas_diferentes')
-
-    db = SessionLocal()
-    user = db.query(Usuario).filter(Usuario.usuarioID == id).first()
-
-    if not user:
-        return redirect('/usuarios')
-
-    nova_hash = bcrypt.generate_password_hash(senha1).decode('utf-8')
-    user.senha = nova_hash
+    db.execute(text("DELETE FROM usuario WHERE usuarioID = :id"), {"id": id})
     db.commit()
 
-    return redirect('/usuarios?sucesso=senha_alterada')
+    return redirect("/usuarios")
+
+
+@user_bp.route("/usuarios/senha/<int:id>", methods=["POST"])
+@login_required
+def alterar_senha(id):
+    from app import app
+    db = app.db()
+
+    senha = request.form["senha"]
+    confirmar = request.form["confirmar"]
+
+    if senha != confirmar:
+        return redirect("/usuarios?erro=senhas_diferentes")
+
+    senha_hash = app.bcrypt.generate_password_hash(senha).decode('utf-8')
+
+    db.execute(text("UPDATE usuario SET senha = :s WHERE usuarioID = :id"),
+               {"s": senha_hash, "id": id})
+
+    db.commit()
+    return redirect("/usuarios?sucesso=senha_alterada")

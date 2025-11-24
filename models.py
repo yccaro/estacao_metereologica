@@ -4,28 +4,37 @@ from datetime import datetime
 
 Base = declarative_base()
 
-class Usuario(Base):
-    __tablename__ = 'usuario'
 
-    usuarioID = Column(Integer, primary_key=True)
-    usuario = Column(String(50), unique=True, nullable=False)
+# ---------------------------
+# Tabela de Usuários
+# ---------------------------
+class Usuario(Base):
+    __tablename__ = "usuario"
+
+    usuarioID = Column(Integer, primary_key=True, autoincrement=True)
+    usuario = Column(String(50), nullable=False, unique=True)
     senha = Column(String(255), nullable=False)
 
 
+# ---------------------------
+# Tabela de Sensores
+# ---------------------------
 class Sensor(Base):
-    __tablename__ = 'sensor'
+    __tablename__ = "sensor"
 
-    sensorID = Column(Integer, primary_key=True)
-    descricao = Column(String(100))
-    usuarioID = Column(Integer, ForeignKey('usuario.usuarioID'))
+    sensorID = Column(Integer, primary_key=True, autoincrement=True)
+    nome = Column(String(50), nullable=False)
 
 
+# ---------------------------
+# Tabela de Leituras
+# ---------------------------
 class Leitura(Base):
-    __tablename__ = 'leitura'
+    __tablename__ = "leitura"
 
     leituraID = Column(Integer, primary_key=True, autoincrement=True)
-    dataTime = Column(DateTime, default=datetime.utcnow)
-    temperatura = Column(DECIMAL(5,2))
-    umidade = Column(DECIMAL(5,2))
-    pressao = Column(DECIMAL(6,2))
-    sensorID = Column(Integer, ForeignKey('sensor.sensorID'))
+    dataTime = Column(DateTime, default=datetime.now)
+    temperatura = Column(DECIMAL(5, 2))
+    umidade = Column(DECIMAL(5, 2))
+    pressao = Column(DECIMAL(6, 2))
+    sensorID = Column(Integer, ForeignKey("sensor.sensorID"))
