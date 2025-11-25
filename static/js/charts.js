@@ -9,7 +9,6 @@ async function carregar() {
     const u = dados.map(d => d.umidade);
     const p = dados.map(d => d.pressao);
 
-    // CONFIGURAÇÃO GLOBAL PARA TODOS OS GRÁFICOS
     const configBase = {
         type: "line",
         options: {
@@ -46,7 +45,6 @@ async function carregar() {
         }
     };
 
-    // === TEMPERATURA ===
     new Chart(document.getElementById("grafTemp"), {
         ...configBase,
         data: {
@@ -61,7 +59,6 @@ async function carregar() {
         }
     });
 
-    // === UMIDADE ===
     new Chart(document.getElementById("grafUmi"), {
         ...configBase,
         data: {
@@ -76,7 +73,6 @@ async function carregar() {
         }
     });
 
-    // === PRESSÃO ===
     new Chart(document.getElementById("grafPres"), {
         ...configBase,
         data: {

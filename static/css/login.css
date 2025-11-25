@@ -25,9 +25,8 @@ button:hover {
 
 input[type="text"],
 input[type="password"] {
-    background-color: #ffffff !important;  /* fundo branco */
-    color: #000000 !important;             /* texto preto */
-    border: 1px solid #0f172a;             /* borda discreta */
+    background-color: #ffffff !important;  
+    color: #000000 !important;             
     padding: 12px;
     border-radius: 6px;
 }

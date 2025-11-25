@@ -4,10 +4,6 @@ from datetime import datetime
 
 Base = declarative_base()
 
-
-# ---------------------------
-# Tabela de Usuários
-# ---------------------------
 class Usuario(Base):
     __tablename__ = "usuario"
 
@@ -15,20 +11,12 @@ class Usuario(Base):
     usuario = Column(String(50), nullable=False, unique=True)
     senha = Column(String(255), nullable=False)
 
-
-# ---------------------------
-# Tabela de Sensores
-# ---------------------------
 class Sensor(Base):
     __tablename__ = "sensor"
 
     sensorID = Column(Integer, primary_key=True, autoincrement=True)
     nome = Column(String(50), nullable=False)
 
-
-# ---------------------------
-# Tabela de Leituras
-# ---------------------------
 class Leitura(Base):
     __tablename__ = "leitura"
 
