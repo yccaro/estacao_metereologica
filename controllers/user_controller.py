@@ -1,9 +1,7 @@
-from flask import Blueprint, render_template, request, redirect, session, url_for
-from models import Usuario
+from flask import Blueprint, render_template, request, redirect, session
 from sqlalchemy import text
 
 user_bp = Blueprint("usuarios", __name__)
-
 
 def login_required(func):
     def wrapper(*args, **kwargs):
@@ -13,7 +11,6 @@ def login_required(func):
     wrapper.__name__ = func.__name__
     return wrapper
 
-
 @user_bp.route("/usuarios")
 @login_required
 def lista_usuarios():
@@ -22,7 +19,6 @@ def lista_usuarios():
 
     lista = db.execute(text("SELECT * FROM usuario")).fetchall()
     return render_template("usuarios.html", usuarios=lista)
-
 
 @user_bp.route("/usuarios/add", methods=["POST"])
 @login_required
@@ -35,12 +31,12 @@ def add_usuario():
 
     senha_hash = app.bcrypt.generate_password_hash(senha).decode('utf-8')
 
-    db.execute(text("INSERT INTO usuario (usuario, senha) VALUES (:u, :s)"),
-               {"u": usuario, "s": senha_hash})
-
+    db.execute(
+        text("INSERT INTO usuario (usuario, senha) VALUES (:u, :s)"),
+        {"u": usuario, "s": senha_hash}
+    )
     db.commit()
     return redirect("/usuarios")
-
 
 @user_bp.route("/usuarios/delete/<int:id>")
 @login_required
@@ -52,7 +48,6 @@ def delete_usuario(id):
     db.commit()
 
     return redirect("/usuarios")
-
 
 @user_bp.route("/usuarios/senha/<int:id>", methods=["POST"])
 @login_required
@@ -68,8 +63,10 @@ def alterar_senha(id):
 
     senha_hash = app.bcrypt.generate_password_hash(senha).decode('utf-8')
 
-    db.execute(text("UPDATE usuario SET senha = :s WHERE usuarioID = :id"),
-               {"s": senha_hash, "id": id})
-
+    db.execute(
+        text("UPDATE usuario SET senha = :s WHERE usuarioID = :id"),
+        {"s": senha_hash, "id": id}
+    )
     db.commit()
+
     return redirect("/usuarios?sucesso=senha_alterada")
