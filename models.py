@@ -10,6 +10,7 @@ class Usuario(Base):
     usuarioID = Column(Integer, primary_key=True, autoincrement=True)
     usuario = Column(String(50), nullable=False, unique=True)
     senha = Column(String(255), nullable=False)
+    tipo = Column(String(20), nullable=False, default="user")  # admin/user
 
 class Sensor(Base):
     __tablename__ = "sensor"

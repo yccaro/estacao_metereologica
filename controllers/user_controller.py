@@ -1,18 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, session
+from flask import render_template, request, redirect, session
 from sqlalchemy import text
+from controllers.leitura_controller import login_required, admin_required
 
-user_bp = Blueprint("usuarios", __name__)
-
-def login_required(func):
-    def wrapper(*args, **kwargs):
-        if "usuario" not in session:
-            return redirect("/login")
-        return func(*args, **kwargs)
-    wrapper.__name__ = func.__name__
-    return wrapper
-
-@user_bp.route("/usuarios")
 @login_required
+@admin_required
 def lista_usuarios():
     from app import app
     db = app.db()
@@ -20,26 +11,29 @@ def lista_usuarios():
     lista = db.execute(text("SELECT * FROM usuario")).fetchall()
     return render_template("usuarios.html", usuarios=lista)
 
-@user_bp.route("/usuarios/add", methods=["POST"])
+
 @login_required
+@admin_required
 def add_usuario():
     from app import app
     db = app.db()
 
     usuario = request.form["usuario"]
     senha = request.form["senha"]
+    tipo = request.form.get("tipo", "user")
 
     senha_hash = app.bcrypt.generate_password_hash(senha).decode('utf-8')
 
     db.execute(
-        text("INSERT INTO usuario (usuario, senha) VALUES (:u, :s)"),
-        {"u": usuario, "s": senha_hash}
+        text("INSERT INTO usuario (usuario, senha, tipo) VALUES (:u, :s, :t)"),
+        {"u": usuario, "s": senha_hash, "t": tipo}
     )
     db.commit()
     return redirect("/usuarios")
 
-@user_bp.route("/usuarios/delete/<int:id>")
+
 @login_required
+@admin_required
 def delete_usuario(id):
     from app import app
     db = app.db()
@@ -49,8 +43,9 @@ def delete_usuario(id):
 
     return redirect("/usuarios")
 
-@user_bp.route("/usuarios/senha/<int:id>", methods=["POST"])
+
 @login_required
+@admin_required
 def alterar_senha(id):
     from app import app
     db = app.db()
