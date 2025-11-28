@@ -8,6 +8,7 @@ from routes.auth_routes import auth_bp
 from routes.user_routes import user_bp
 from routes.leitura_routes import leitura_bp
 from routes.api_routes import api_bp
+from routes.relatorio_routes import relatorio_bp
 
 app = Flask(__name__)
 app.secret_key = "SUA_CHAVE_SECRETA_AQUI"
@@ -28,6 +29,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(leitura_bp)
 app.register_blueprint(api_bp)
+app.register_blueprint(relatorio_bp)
 
 @app.route("/")
 def raiz():

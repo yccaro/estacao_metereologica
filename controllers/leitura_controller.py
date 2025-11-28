@@ -35,7 +35,7 @@ def api_leituras():
     db = app.db()
 
     dados = db.execute(text(
-        "SELECT * FROM leitura ORDER BY leituraID DESC LIMIT 40"
+        "SELECT * FROM leitura ORDER BY leituraID DESC LIMIT 10"
     )).fetchall()
 
     resp = []
