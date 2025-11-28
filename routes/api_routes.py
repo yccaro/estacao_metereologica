@@ -36,3 +36,4 @@ def receber_leitura():
     except Exception as e:
         print("Erro API:", e)
         return jsonify({"status": "erro", "msg": str(e)}), 500
+

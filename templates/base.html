@@ -32,9 +32,11 @@
                         <a class="nav-link text-info" href="/painel">Painel</a>
                     </li>
 
+                    {% if session.tipo == 'admin' %}
                     <li class="nav-item">
-                        <a class="nav-link text-info" href="/usuarios">Usuários</a>
+                          <a class="nav-link text-info" href="/usuarios">Usuários</a>
                     </li>
+                    {% endif %}
 
                     <li class="nav-item">
                         <a class="nav-link text-danger fw-bold" href="/logout">Sair</a>
