@@ -63,7 +63,6 @@ def gerar_pdf():
     )).fetchall()
 
     buffer = BytesIO()
-
     pdf = canvas.Canvas(buffer, pagesize=A4)
     largura, altura = A4
 
@@ -71,27 +70,35 @@ def gerar_pdf():
     pdf.setFont("Helvetica-Bold", 14)
     pdf.drawString(50, y, "Relatório de Leituras")
     y -= 30
-
     pdf.setFont("Helvetica", 10)
 
-    pdf.drawString(50, y, "ID")
-    pdf.drawString(100, y, "Temperatura")
-    pdf.drawString(200, y, "Umidade")
-    pdf.drawString(300, y, "Pressão")
-    pdf.drawString(400, y, "Data")
+    
+    def desenhar_cabecalho(y_pos):
+        pdf.setFont("Helvetica-Bold", 10)
+        pdf.drawString(50, y_pos, "Data")
+        pdf.drawString(180, y_pos, "Temperatura")
+        pdf.drawString(300, y_pos, "Umidade")
+        pdf.drawString(400, y_pos, "Pressão")
+        pdf.drawString(480, y_pos, "ID")
+        pdf.setFont("Helvetica", 10)
+
+    # Desenha cabeçalho inicial
+    desenhar_cabecalho(y)
     y -= 20
 
+    # Loop pelos dados
     for d in dados:
-        if y < 50:  
+        if y < 50:
             pdf.showPage()
             y = altura - 50
-            pdf.setFont("Helvetica", 10)
+            desenhar_cabecalho(y)
+            y -= 20
 
-        pdf.drawString(50, y, str(d.leituraID))
-        pdf.drawString(100, y, str(d.temperatura))
-        pdf.drawString(200, y, str(d.umidade))
-        pdf.drawString(300, y, str(d.pressao))
-        pdf.drawString(400, y, str(d.dataTime))
+        pdf.drawString(50, y, str(d.dataTime))
+        pdf.drawString(180, y, str(d.temperatura))
+        pdf.drawString(300, y, str(d.umidade))
+        pdf.drawString(400, y, str(d.pressao))
+        pdf.drawString(480, y, str(d.leituraID))
         y -= 20
 
     pdf.save()

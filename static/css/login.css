@@ -39,7 +39,7 @@ input.form-control {
 }
 
 input::placeholder {
-    color: #555555 !important;
+    color: #3c3b3b !important;
 }
 
 input.form-control:focus {

@@ -17,16 +17,16 @@ async function carregar() {
             scales: {
                 x: {
                     ticks: { 
-                        color: "#ffffff",      // COR DOS NÚMEROS DO EIXO X
+                        color: "#ffffff",      // números do eixo X
                         font: { size: 12 }
                     },
                     grid: {
-                        color: "rgba(255,255,255,0.08)" // LINHAS DO FUNDO
+                        color: "rgba(255,255,255,0.08)" // linhas do fundo
                     }
                 },
                 y: {
                     ticks: { 
-                        color: "#ffffff",      // COR DOS NÚMEROS DO EIXO Y
+                        color: "#ffffff",      // números do eixo Y
                         font: { size: 12 }
                     },
                     grid: {
@@ -37,7 +37,7 @@ async function carregar() {
             plugins: {
                 legend: {
                     labels: {
-                        color: "#ffffff",      // COR DO TEXTO DA LEGENDA
+                        color: "#ffffff",      // texto da legenda
                         font: { size: 14 }
                     }
                 }
@@ -45,6 +45,7 @@ async function carregar() {
         }
     };
 
+    // Gráfico de Temperatura
     new Chart(document.getElementById("grafTemp"), {
         ...configBase,
         data: {
@@ -52,13 +53,14 @@ async function carregar() {
             datasets: [{
                 label: "Temperatura (°C)",
                 data: t,
-                borderColor: "#38bdf8",  // azul
-                backgroundColor: "rgba(56,189,248,0.25)",
+                borderColor: "#38bdf8",            // azul
+                backgroundColor: "rgba(46,46,46,0.6)", // fundo cinza escuro
                 tension: 0.3
             }]
         }
     });
 
+    // Gráfico de Umidade
     new Chart(document.getElementById("grafUmi"), {
         ...configBase,
         data: {
@@ -66,13 +68,14 @@ async function carregar() {
             datasets: [{
                 label: "Umidade (%)",
                 data: u,
-                borderColor: "#34d399", // verde
-                backgroundColor: "rgba(52,211,153,0.25)",
+                borderColor: "#34d399",            // verde
+                backgroundColor: "rgba(46,46,46,0.6)",
                 tension: 0.3
             }]
         }
     });
 
+    // Gráfico de Pressão
     new Chart(document.getElementById("grafPres"), {
         ...configBase,
         data: {
@@ -80,8 +83,8 @@ async function carregar() {
             datasets: [{
                 label: "Pressão (hPa)",
                 data: p,
-                borderColor: "#f87171", // vermelho
-                backgroundColor: "rgba(248,113,113,0.25)",
+                borderColor: "#f87171",            // vermelho
+                backgroundColor: "rgba(46,46,46,0.6)",
                 tension: 0.3
             }]
         }
