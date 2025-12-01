@@ -1,10 +1,6 @@
 from flask import render_template, request, redirect, session
 from sqlalchemy import text
 
-# --------------------------
-#  AUTH CONTROLLER (LÓGICA)
-# --------------------------
-
 class AuthController:
 
     @staticmethod

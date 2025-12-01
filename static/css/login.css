@@ -1,32 +1,24 @@
-/* Fundo geral */
+
 body {
     background-color: #0f172a;
     color: #e2e8f0;
     font-family: 'Poppins', sans-serif;
 }
 
-/* --------- LOGO --------- */
-
-/* Container da LOGO */
 .logo-container {
     margin-bottom: 10px;
 }
 
-/* LOGO */
 .login-logo {
     width: 380px;
-    margin-bottom: 120px; /* SUBIU 40px */
+    margin-bottom: 120px;
 }
 
-/* --------- CARD DO LOGIN --------- */
-
-/* Container do card */
 .login-container {
-    margin-top: -160px; /* SUBIU 40px */
+    margin-top: -160px; 
     width: 420px;
 }
 
-/* Card */
 .login-card {
     background-color: #1e293b;
     border: none;
@@ -34,12 +26,10 @@ body {
     padding: 30px;
 }
 
-/* Título */
 .login-title {
     color: #38bdf8;
 }
 
-/* Inputs */
 input.form-control {
     background-color: #ffffff !important;
     color: #000000 !important;
@@ -48,18 +38,15 @@ input.form-control {
     border: 1px solid #334155 !important;
 }
 
-/* Placeholder */
 input::placeholder {
     color: #555555 !important;
 }
 
-/* Foco */
 input.form-control:focus {
     border-color: #38bdf8 !important;
     box-shadow: 0 0 8px rgba(56, 189, 248, 0.4) !important;
 }
 
-/* Botão */
 .login-btn {
     background: #38bdf8;
     color: #0f172a;

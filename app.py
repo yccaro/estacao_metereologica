@@ -3,8 +3,8 @@ from flask import Flask, redirect, url_for
 from flask_bcrypt import Bcrypt
 from sqlalchemy.orm import sessionmaker
 
-from config import Config   # IMPORTA A CLASSE
-engine = Config.engine      # PEGA O ENGINE DA CLASSE
+from config import Config   
+engine = Config.engine      
 
 from routes.auth_routes import auth_bp
 from routes.user_routes import user_bp
@@ -14,15 +14,12 @@ from routes.api_routes import api_bp
 app = Flask(__name__)
 app.secret_key = "SUA_CHAVE_SECRETA_AQUI"
 
-# BCRYPT
 bcrypt = Bcrypt(app)
 app.bcrypt = bcrypt
 
-# BANCO DE DADOS
 SessionLocal = sessionmaker(bind=engine)
 app.db = SessionLocal
 
-# LOGS
 logging.basicConfig(
     filename="logs/app.log",
     level=logging.INFO,

@@ -3,8 +3,6 @@ from sqlalchemy import text
 
 auth_bp = Blueprint("auth", __name__)
 
-
-# ============= LOGIN =============
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     from app import app
@@ -29,15 +27,11 @@ def login():
 
     return render_template("login.html")
 
-
-# ============= LOGOUT =============
 @auth_bp.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
 
-
-# ============= REGISTRO DE USUÁRIO =============
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     from app import app
