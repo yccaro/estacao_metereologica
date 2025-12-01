@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine
 
-engine = create_engine(
-    "mysql+pymysql://root:40028922@localhost/sensores_bd",
-    echo=False,
-    pool_pre_ping=True
-)
+class Config:
+    # Conexão com o banco
+    DATABASE_URI = "mysql+pymysql://root:40028922@localhost/sensores_bd"
+
+    engine = create_engine(
+        DATABASE_URI,
+        echo=False,
+        pool_pre_ping=True
+    )
