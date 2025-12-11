@@ -17,16 +17,16 @@ async function carregar() {
             scales: {
                 x: {
                     ticks: { 
-                        color: "#ffffff",      // números do eixo X
+                        color: "#ffffff",     
                         font: { size: 12 }
                     },
                     grid: {
-                        color: "rgba(255,255,255,0.08)" // linhas do fundo
+                        color: "rgba(255,255,255,0.08)" 
                     }
                 },
                 y: {
                     ticks: { 
-                        color: "#ffffff",      // números do eixo Y
+                        color: "#ffffff",     
                         font: { size: 12 }
                     },
                     grid: {
@@ -37,7 +37,7 @@ async function carregar() {
             plugins: {
                 legend: {
                     labels: {
-                        color: "#ffffff",      // texto da legenda
+                        color: "#ffffff",     
                         font: { size: 14 }
                     }
                 }
@@ -53,8 +53,8 @@ async function carregar() {
             datasets: [{
                 label: "Temperatura (°C)",
                 data: t,
-                borderColor: "#38bdf8",            // azul
-                backgroundColor: "rgba(46,46,46,0.6)", // fundo cinza escuro
+                borderColor: "#38bdf8",           
+                backgroundColor: "rgba(46,46,46,0.6)", 
                 tension: 0.3
             }]
         }
@@ -68,7 +68,7 @@ async function carregar() {
             datasets: [{
                 label: "Umidade (%)",
                 data: u,
-                borderColor: "#34d399",            // verde
+                borderColor: "#34d399",            
                 backgroundColor: "rgba(46,46,46,0.6)",
                 tension: 0.3
             }]
@@ -83,7 +83,7 @@ async function carregar() {
             datasets: [{
                 label: "Pressão (hPa)",
                 data: p,
-                borderColor: "#f87171",            // vermelho
+                borderColor: "#f87171",           
                 backgroundColor: "rgba(46,46,46,0.6)",
                 tension: 0.3
             }]

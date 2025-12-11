@@ -59,7 +59,7 @@ def gerar_pdf():
     db = app.db()
 
     dados = db.execute(text(
-        "SELECT * FROM leitura ORDER BY leituraID DESC"
+        "SELECT * FROM leitura ORDER BY leituraID ASC"
     )).fetchall()
 
     buffer = BytesIO()
